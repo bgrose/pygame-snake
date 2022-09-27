@@ -11,7 +11,10 @@ WIDTH = 800
 HEIGHT = 800
 GREEN = (0,255,0)
 RED = (255,0,0)
+BLACK = (0,0,0)
+WHITE = (255,255,255)
 SIZE = 20
+SPEED = 15
 
 quitTrigger = False
 
@@ -33,7 +36,7 @@ def gameLoop():
     moveX = 0
     moveY = 0
     snakeList = []
-    snakeList.append([currX, currY])
+    snakeLength = 1
     
     foodX, foodY = g.genFood(WIDTH, HEIGHT, SIZE)
     
@@ -41,6 +44,8 @@ def gameLoop():
         
         while menuHold:
             quitTrigger = g.menu(display, WIDTH, HEIGHT)
+            if quitTrigger == True:
+                break
             gameLoop()
         
         for event in pygame.event.get():
@@ -49,20 +54,37 @@ def gameLoop():
             if event.type == pygame.KEYDOWN:
                 moveX, moveY = g.movement(moveX, moveY, SIZE, event.key)
                     
-        if currX >= WIDTH or currX < 0 or currY >= HEIGHT or currY < 0:
+        if currX >= WIDTH-SIZE or currX < SIZE or currY >= HEIGHT-SIZE or currY < SIZE:
             menuHold = True
         
         currX += moveX
         currY += moveY
         
     
-        display.fill((0,0,0))
+        display.fill(BLACK)
+        
+        #draw border around screen
+        pygame.draw.rect(display, WHITE, (0,0,WIDTH,HEIGHT), SIZE)
+        
         pygame.draw.rect(display, GREEN, [currX, currY, SIZE, SIZE])
         pygame.draw.rect(display, RED, [foodX,foodY,SIZE,SIZE])
-        Scoremesg = pygame.font.SysFont("comicsansms", 20)
+        Scoremesg = pygame.font.SysFont("comicsansms", 15)
         ScoreString = "Score: " + str(Score)
         # put score top left
-        display.blit(Scoremesg.render(ScoreString, True, (255,255,255)), (0,0))
+        display.blit(Scoremesg.render(ScoreString, True, RED), (0,0))
+        
+        snakeHead = []
+        snakeHead.append(currX)
+        snakeHead.append(currY)
+        snakeList.append(snakeHead)
+        if len(snakeList) > snakeLength:
+            del snakeList[0]
+        
+        for x in snakeList[:-1]:
+            if x == snakeHead:
+                menuHold = True
+                
+        g.drawSnake(snakeList, SIZE, display)
         
         
         pygame.display.update()
@@ -70,8 +92,10 @@ def gameLoop():
         if(currX == foodX and currY == foodY):
             Score += 1
             foodX, foodY = g.genFood(WIDTH, HEIGHT, SIZE)
-            snakeList = g.growSnake(snakeList, SIZE)
-        clock.tick(15)
+            snakeLength += 1
+        clock.tick(SPEED)
+        
+
 
 
 gameLoop()
