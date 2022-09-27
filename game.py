@@ -1,5 +1,6 @@
 import pygame
 import time
+import random
 
 
 def gameOver(display, WIDTH, HEIGHT):
@@ -28,3 +29,33 @@ def movement(moveX, moveY, SIZE, key):
         moveX = 0
         moveY = SIZE
     return moveX, moveY
+
+def menu(display, WIDTH, HEIGHT):
+    display.fill((0,0,0))
+    # Print Game Over
+    mesg = pygame.font.SysFont("comicsansms", 25)
+    display.blit(mesg.render("You Lost, click space to replay or esc to quit", True, (255,255,255)), (WIDTH/2 -150, HEIGHT/2))
+    pygame.display.update()
+    
+    wait = True
+    
+    while wait:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    return False
+                elif event.key == pygame.K_ESCAPE:
+                    gameOver(display, WIDTH, HEIGHT)
+                    return True #redundent
+                
+def genFood(WIDTH, HEIGHT, SIZE):
+    foodX = round(random.randrange(0, WIDTH - SIZE) / 20.0) * 20.0
+    foodY = round(random.randrange(0, HEIGHT - SIZE) / 20.0) * 20.0
+    return foodX, foodY
+
+def growSnake(snakeList, SIZE):
+    snakeHead = []
+    snakeHead.append(snakeList[-1][0])
+    snakeHead.append(snakeList[-1][1])
+    snakeList.append(snakeHead)
+    return snakeList
