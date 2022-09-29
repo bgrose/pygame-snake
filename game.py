@@ -18,7 +18,7 @@ def gameOver(display, WIDTH, HEIGHT):
     quit()
     return 0
     
-def movement(moveX, moveY, SIZE, key):
+def movement(moveX, moveY, SIZE, key, display, WIDTH, HEIGHT):
     if key == pygame.K_LEFT:
         moveX = -SIZE
         moveY = 0
@@ -31,6 +31,9 @@ def movement(moveX, moveY, SIZE, key):
     elif key == pygame.K_DOWN:
         moveX = 0
         moveY = SIZE
+    elif key == pygame.K_SPACE:
+        pause(display, WIDTH, HEIGHT)
+        
     return moveX, moveY
 
 def menu(display, WIDTH, HEIGHT):
@@ -61,3 +64,14 @@ def genFood(WIDTH, HEIGHT, SIZE):
 def drawSnake(snakeList, SIZE, display):
     for x in snakeList:
         pygame.draw.rect(display, GREEN, [x[0], x[1], SIZE, SIZE])
+        
+def pause(display, WIDTH, HEIGHT):
+    hold = True
+    while(hold):
+        mesg = pygame.font.SysFont("comicsansms", 25)
+        display.blit(mesg.render("Click Space to resume", True, WHITE), (WIDTH/2 -150, HEIGHT/2))
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    hold = False

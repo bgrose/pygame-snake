@@ -1,6 +1,8 @@
 # Bradley Grose
 
+from turtle import update
 import game as g
+import scoreboard as score
 import pygame
 import random
 
@@ -30,7 +32,6 @@ clock = pygame.time.Clock()
 def gameLoop():
     currX = WIDTH / 2
     currY = HEIGHT / 2
-    Score = 0
     quitTrigger = False
     menuHold = False
     moveX = 0
@@ -52,7 +53,7 @@ def gameLoop():
             if event.type == pygame.QUIT:
                 quitTrigger = True
             if event.type == pygame.KEYDOWN:
-                moveX, moveY = g.movement(moveX, moveY, SIZE, event.key)
+                moveX, moveY = g.movement(moveX, moveY, SIZE, event.key, display, WIDTH, HEIGHT)
                     
         if currX >= WIDTH-SIZE or currX < SIZE or currY >= HEIGHT-SIZE or currY < SIZE:
             menuHold = True
@@ -68,10 +69,12 @@ def gameLoop():
         
         pygame.draw.rect(display, GREEN, [currX, currY, SIZE, SIZE])
         pygame.draw.rect(display, RED, [foodX,foodY,SIZE,SIZE])
-        Scoremesg = pygame.font.SysFont("comicsansms", 15)
-        ScoreString = "Score: " + str(Score)
+
         # put score top left
-        display.blit(Scoremesg.render(ScoreString, True, RED), (0,0))
+        TopMesg = pygame.font.SysFont("comicsansms", 15)
+        display.blit(TopMesg.render(score.scoreMessage(), True, RED), (0,0))
+        display.blit(TopMesg.render("Press Space to pause", True, RED), (WIDTH-150,0))
+        
         
         snakeHead = []
         snakeHead.append(currX)
@@ -90,7 +93,7 @@ def gameLoop():
         pygame.display.update()
         
         if(currX == foodX and currY == foodY):
-            Score += 1
+            score.update()
             foodX, foodY = g.genFood(WIDTH, HEIGHT, SIZE)
             snakeLength += 1
         clock.tick(SPEED)
