@@ -1,9 +1,17 @@
+"""Imports"""
 import datetime
-RED = (255, 0, 0)
-scoreboard = []
 
+"""Constants"""
+RED = (255, 0, 0)
+
+"""Data Variables"""
+scoreboard = []
 global score
 score = 0
+
+"""
+:summary: Updates the score by 1
+"""
 
 
 def update():
@@ -11,8 +19,20 @@ def update():
     score += 1
 
 
+"""
+:summary: Returns the score
+:return: The score
+"""
+
+
 def getScore():
     return score
+
+
+"""
+:summary: Construct Score Message
+:return: The score message
+"""
 
 
 def scoreMessage():
@@ -21,8 +41,10 @@ def scoreMessage():
     return ScoreString
 
 
-def getScore():
-    return score
+"""
+:summary: Put togehter the score board
+:return: The score board list 
+"""
 
 
 def highScoreBoard():
@@ -30,9 +52,20 @@ def highScoreBoard():
     return printScoreBoard()
 
 
+"""
+:summary: resets score
+"""
+
+
 def resetScore():
     global score
     score = 0
+
+
+"""
+:summary: Check if score is worth of scoreboard
+:return: True if score is worth of scoreboard to show
+"""
 
 
 def addScore():
@@ -55,9 +88,20 @@ def addScore():
     return False
 
 
+"""
+:summary: Lambda function to sort the scoreboard
+"""
+
+
 def sortScoreBoard():
     # Sort scoreboard by score
     scoreboard.sort(key=lambda x: x["score"], reverse=True)
+
+
+"""
+:summary: Creates the List to Hold Scoreboard String
+:return: The Scoreboard String List
+"""
 
 
 def printScoreBoard():
