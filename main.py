@@ -6,6 +6,7 @@ import pygame_menu
 import pygame
 import time
 
+
 WIDTH = 800
 HEIGHT = 800
 GREEN = (0, 255, 0)
