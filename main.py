@@ -52,7 +52,7 @@ def gameLoop():
         """ Game is over next step """
         while menuHold:
             g.menu(display, WIDTH, HEIGHT)
-            show = score.addScore()
+            show = score.addScore(g.getSpeed())
             if (show):
                 showScore()
             time.sleep(5)
@@ -139,13 +139,15 @@ def showScore():
 
     """ Print the Score Board (Weird Adjust for Pygame) """
     for i in listPrint:
-        display.blit(mesg.render(i, True, WHITE), (WIDTH/2-100, 50+adjust))
+        display.blit(mesg.render(i, True, WHITE), (WIDTH/2-175, 50+adjust))
         adjust += 30
 
     print(score.printScoreBoard())
     pygame.display.update()
     time.sleep(5)
     menuStart(display, WIDTH, HEIGHT)
+
+
 
 
 """
@@ -160,9 +162,10 @@ def menuStart(display, WIDTH, HEIGHT):
     menu = pygame_menu.Menu('Welcome', WIDTH, HEIGHT,
                             theme=pygame_menu.themes.THEME_BLUE)
 
+    """ Menu Options """
+    menu.add.text_input('Name :', default=score.getName(), onchange=score.setName)
     menu.add.selector(
         'Difficulty :', [('EASY', 1), ('HARD', 2)], onchange=set_difficulty)
-
     menu.add.button('Play', gameLoop)
     menu.add.button('High Scores', showScore)
     menu.add.button('Quit', pygame_menu.events.EXIT)
@@ -174,4 +177,5 @@ def menuStart(display, WIDTH, HEIGHT):
 
 
 """Start the game"""
+score.readScoreBoard()
 menuStart(display, WIDTH, HEIGHT)
