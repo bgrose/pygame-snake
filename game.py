@@ -2,8 +2,11 @@ import pygame
 import time
 import random
 
+import scoreboard as score
+
 WHITE = (255,255,255)
 GREEN = (0,255,0)
+SPEED = 20
 
 
 def gameOver(display, WIDTH, HEIGHT):
@@ -40,24 +43,15 @@ def menu(display, WIDTH, HEIGHT):
     display.fill((0,0,0))
     # Print Game Over
     mesg = pygame.font.SysFont("comicsansms", 25)
-    display.blit(mesg.render("You Lost, click space to replay or esc to quit", True, WHITE), (WIDTH/2 -150, HEIGHT/2))
+    display.blit(mesg.render("You Lost! Score: "+str(score.getScore()), True, WHITE), (WIDTH/2 -150, HEIGHT/2))
     pygame.display.update()
     
-    wait = True
-    
-    while wait:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return True
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    return False
-                elif event.key == pygame.K_ESCAPE:
-                    gameOver(display, WIDTH, HEIGHT)
                 
 def genFood(WIDTH, HEIGHT, SIZE):
+    rerun = True
     foodX = round(random.randrange(SIZE, WIDTH - SIZE*2) / 20.0) * 20.0
     foodY = round(random.randrange(SIZE, HEIGHT - SIZE*2) / 20.0) * 20.0
+    
     return foodX, foodY
 
 
@@ -75,3 +69,10 @@ def pause(display, WIDTH, HEIGHT):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     hold = False
+                    
+def setSpeed(speed):
+    global SPEED
+    SPEED = speed
+    
+def getSpeed():
+    return SPEED
